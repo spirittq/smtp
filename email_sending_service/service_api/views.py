@@ -21,12 +21,10 @@ def send_email(request):
     content = get_content(request)
     service_repository = ServiceRepository(connections['postgres'].cursor())
     smtpobj = smtplib.SMTP('localhost', 25)
-    email_sender = EmailSender(service_repository, smtpobj)
-    email_sender.save_email_raw_data(content)
-    email_sender.raw_data_parse(content)
-    result_id = email_sender.save_email()
-    email_sender.send_email(result_id)
-    return JsonResponse(result_id, safe=False)
+
+    email_sender = EmailSender(service_repository, smtpobj, content)
+    message_id = email_sender.execute()
+    return JsonResponse(message_id, safe=False)
 
 
 def get_content(request):
