@@ -28,3 +28,8 @@ class ServiceRepository:
         ])
         new_id = self.cursor.fetchone()[0]
         return new_id
+
+    def change_status(self, result_id, condition):
+        self.cursor.callproc('change_status_code', [result_id, condition, ])
+        new_id = self.cursor.fetchone()[0]
+        return new_id
