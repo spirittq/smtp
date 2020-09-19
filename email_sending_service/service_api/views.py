@@ -7,6 +7,7 @@ from django.db import connections
 import json
 import smtplib
 from django.http import JsonResponse
+from django.conf import settings
 
 
 def email_info(request):
@@ -20,7 +21,7 @@ def email_info(request):
 def send_email(request):
     content = get_content(request)
     service_repository = ServiceRepository(connections['postgres'].cursor())
-    smtpobj = smtplib.SMTP('localhost', 25)
+    smtpobj = smtplib.SMTP(settings.SMTP_SERVER_HOST, settings.SMTP_SERVER_PORT)
 
     email_sender = EmailSender(service_repository, smtpobj, content)
     message_id = email_sender.execute()

@@ -128,3 +128,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SMTP_SERVER_HOST = 'localhost'
+SMTP_SERVER_PORT = 25
