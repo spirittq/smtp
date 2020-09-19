@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from .repository import ServiceRepository
+from .business_layer.email_sender import EmailSender
 from django.db import connections
 import json
 from django.http import JsonResponse
@@ -18,11 +19,19 @@ def email_info(request):
 def send_email(request):
     content = get_content(request)
     service_repository = ServiceRepository(connections['postgres'].cursor())
-    raw_id = service_repository.save_email_raw_data(content)
-    result = {"raw_id": raw_id}
-    return JsonResponse(result)
+    email_sender = EmailSender(service_repository)
+    email_sender.save_email_raw_data(content)
+    email_sender.raw_data_parse(content)
+    result = email_sender.save_email()
+
+
+
+
+
+    return JsonResponse(result, safe=False)
 
 
 def get_content(request):
     body = request.body.decode("utf-8")
     return body
+

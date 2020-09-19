@@ -17,3 +17,14 @@ class ServiceRepository:
         self.cursor.callproc('save_email_raw_data', [raw_data, ])
         new_id = self.cursor.fetchone()[0]
         return new_id
+
+    def save_email(self, raw_id, sender, recipient, subject, message):
+        self.cursor.callproc('save_email_data', [
+            raw_id,
+            sender,
+            recipient,
+            subject,
+            message,
+        ])
+        new_id = self.cursor.fetchone()[0]
+        return new_id
