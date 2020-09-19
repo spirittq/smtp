@@ -29,11 +29,14 @@ class EmailSender:
         try:
             message = 'Subject: {}\n\n{}'.format(self.subject, self.message)
             self.smtpobj.sendmail(self.sender, self.recipient, message)
-            self.change_status(result_id, True)
+            self.set_status_success(result_id)
             print("Successfully sent email")
         except Exception:
-            self.change_status(result_id, False)
+            self.set_status_failed(result_id)
             print("Error: unable to send email")
 
-    def change_status(self, result_id, condition):
-        self.service_repository.change_status(result_id, condition)
+    def set_status_success(self, result_id):
+        self.service_repository.set_status_success(result_id)
+
+    def set_status_failed(self, result_id):
+        self.service_repository.set_status_failed(result_id)
